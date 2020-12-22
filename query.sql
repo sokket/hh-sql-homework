@@ -3,7 +3,7 @@ SELECT position_name,
        area_id
 FROM vacancy
          INNER JOIN employer on employer.employer_id = vacancy.employer_id
-WHERE compensation_from IS null
+WHERE compensation_from IS null AND compensation_to IS null
 ORDER BY vacancy_created_at DESC
 LIMIT 10;
 
