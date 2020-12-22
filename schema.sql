@@ -8,10 +8,10 @@ CREATE TABLE employer
 
 CREATE TABLE vacancy
 (
-    vacancy_id          serial       primary key,
-    vacancy_created_at  integer      not null,
-    employer_id         integer      not null references employer (employer_id),
-    position_name       text         not null,
+    vacancy_id          serial          primary key,
+    vacancy_created_at  timestamp       not null,
+    employer_id         integer         not null references employer (employer_id),
+    position_name       text            not null,
     compensation_from   integer,
     compensation_to     integer,
     compensation_gross  boolean
@@ -26,8 +26,8 @@ CREATE TABLE resume
 
 CREATE TABLE response
 (
-    response_id   serial     primary key,
-    resume_id     integer    not null references resume (resume_id),
-    vacancy_id    integer    not null references vacancy (vacancy_id),
-    response_time integer    not null
+    response_id   serial        primary key,
+    resume_id     integer       not null references resume (resume_id),
+    vacancy_id    integer       not null references vacancy (vacancy_id),
+    response_time timestamp     not null
 );
