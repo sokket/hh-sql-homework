@@ -42,13 +42,19 @@ FROM (
          GROUP BY vacancy.employer_id
      ) AS response_count;
 
-SELECT DISTINCT ON (area_id) area_id,
-                             max(deltas.delta) OVER (PARTITION BY area_id),
-                             min(deltas.delta) OVER (PARTITION BY area_id)
+SELECT
+       area_id,
+       min(time_to_first_response),
+       max(time_to_first_response)
 FROM (
-         SELECT employer.area_id,
-                response.response_time - vacancy.vacancy_created_at AS delta
-         FROM vacancy
-                  INNER JOIN employer on vacancy.employer_id = employer.employer_id
-                  INNER JOIN response on vacancy.vacancy_id = response.vacancy_id
-     ) AS deltas;
+        SELECT
+               employer.area_id,
+               min(response.response_time - vacancy.vacancy_created_at) AS time_to_first_response
+        FROM response
+               INNER JOIN vacancy ON vacancy.vacancy_id = response.vacancy_id
+               INNER JOIN employer ON employer.employer_id = vacancy.employer_id
+        GROUP BY
+               response.vacancy_id,
+               employer.area_id
+    ) AS aittfr
+GROUP BY area_id;
