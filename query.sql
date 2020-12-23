@@ -25,8 +25,8 @@ SELECT employer_name
 FROM (
          SELECT employer_name, count(response) AS responses_count
          FROM employer
-                  INNER JOIN vacancy ON vacancy.employer_id = employer.employer_id
-                  INNER JOIN response ON response.vacancy_id = vacancy.vacancy_id
+                  LEFT JOIN vacancy ON vacancy.employer_id = employer.employer_id
+                  LEFT JOIN response ON response.vacancy_id = vacancy.vacancy_id
          GROUP BY employer.employer_id
      ) as enrc
 ORDER BY responses_count DESC, employer_name
