@@ -32,15 +32,13 @@ FROM (
 ORDER BY responses_count DESC, employer_name
 LIMIT 5;
 
-
-SELECT percentile_cont(0.5) WITHIN GROUP ( ORDER BY response_count.count )
+SELECT percentile_cont(0.5) WITHIN GROUP ( ORDER BY vacancies_count )
 FROM (
-         SELECT count(response) AS count
-         FROM employer
-                  INNER JOIN vacancy ON vacancy.employer_id = employer.employer_id
-                  INNER JOIN response on response.vacancy_id = vacancy.vacancy_id
-         GROUP BY vacancy.employer_id
-     ) AS response_count;
+         SELECT count(vacancy) AS vacancies_count
+         FROM vacancy
+         RIGHT JOIN employer on employer.employer_id = vacancy.employer_id
+         GROUP BY employer.employer_id
+     ) AS vc;
 
 SELECT
        area_id,
